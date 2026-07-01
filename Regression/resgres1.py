@@ -1,6 +1,8 @@
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error
+from pathlib import Path
+
 
 X = [[0],[1],[2]] 
 y = [0,3,6]
@@ -19,11 +21,11 @@ print(f" la prediction de {newX} est {prediction}")
 
 #La prediction reelle
 y_pred = mdl.predict(X)
+
+
 #==========================
 #  LES METRIQUES 
 #========================
-
-#
 mae = mean_absolute_error(y, y_pred)
 print(f";'erreur moyenne est {mae}")
 

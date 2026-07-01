@@ -1,15 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from pathlib import Path
+from mpl_toolkits.mplot3d import Axes3D # Nécessaire pour activer la 3D
+
+# Définir la racine de votre projet (par exemple, le dossier du script actuel)
+BASE_DIR = Path(__file__).parent
+
+# Lire un chemin relatif écrit dans un fichier de configuration
+chemin_relatif = "data/age_vs_poids_vs_taille_vs_sexe.csv"
+
+data_file = BASE_DIR.parent / chemin_relatif
 
 #Importation du dataset
-datafile = pd.read_csv("age_vs_poids_vs_taille_vs_sexe.csv")
+dataframe = pd.read_csv(data_file)
 
 #Les variables predictives
-X = datafile[["age","taille"]]
+X = dataframe[["age","taille"]]
 
 #Le variables Cibles
-y = datafile.poids
+y = dataframe.poids
 
 #Instanciation et entrainement du modele
 model = LinearRegression()
@@ -38,7 +48,7 @@ y_predict =model.predict(X)
 fig = plt.figure()
 ax = fig.add_subplot(111,projection="3d")
 
-ax.scatter(datafile["age"], datafile["taille"],y,color="red",label="Donnees reelles")
+ax.scatter3D(dataframe["age"], dataframe["taille"],y,c=y, cmap='viridis', s=40, edgecolors='w', linewidth=0.5,label="Donnees reelles")
 
 ax.set_xlabel("Age")
 ax.set_ylabel('Taille')
