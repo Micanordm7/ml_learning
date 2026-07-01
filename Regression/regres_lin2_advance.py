@@ -3,7 +3,13 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from pathlib import Path
+
+#importation des fonctions de mmetriques
+from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error, r2_score, mean_absolute_percentage_error
+
 from mpl_toolkits.mplot3d import Axes3D # Nécessaire pour activer la 3D
+
+
 
 # Définir la racine de votre projet (par exemple, le dossier du script actuel)
 BASE_DIR = Path(__file__).parent
@@ -46,3 +52,24 @@ train_score = model.score(X_test,y_test)
 print(f"Score d'entrainement : {train_score}")
 print(f"Score de test : {train_score}")
 
+#Affichage des coefficients
+coef = model.coef_
+print(f" Les coefficients : {coef}")
+
+
+#===================================================#
+#           Les metriques                           #
+
+#Calcul des la prediction
+y_pred = model.predict(X_test)
+
+print(f"Prediction :{y_pred.shape}")
+
+#LE Score R2
+score_r2 = r2_score(y_test, y_pred)
+print(f"Score R2 : {score_r2}")
+
+#FONCTION DE COUT MODEL
+print(f"Erreur quadratique moyenne: {mean_squared_error(y_test, y_pred)}")
+print(f"Erreur Absolue moyenne: {mean_absolute_error(y_test, y_pred)}")
+print(f"Porcentage d'erreur absolu moyenne : {mean_absolute_percentage_error(y_test, y_pred)}")

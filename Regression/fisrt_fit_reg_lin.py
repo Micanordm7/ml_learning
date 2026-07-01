@@ -1,8 +1,19 @@
 import pandas as pd 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
+from pathlib import Path
+
+
+
+# Définir la racine de votre projet (par exemple, le dossier du script actuel)
+BASE_DIR = Path(__file__).parent
+
+# Lire un chemin relatif écrit dans un fichier de configuration
+chemin_relatif = "data/age_vs_poids_vs_taille_vs_sexe.csv"
+
+data_file = BASE_DIR.parent / chemin_relatif
 #importing the dataset
-df = pd.read_csv("age_vs_poids_vs_taille_vs_sexe.csv")
+df = pd.read_csv(data_file)
 
 features = df[['sexe', 'age']]
 
@@ -36,7 +47,7 @@ regress1.fit(features1, target1)
 print(f" Score du premier modele: {regress.score(features, target)}")
 print()
 
-print(f" Score du secpnd modele : {regress1.score(features, target1)}")
+print(f" Score du secpnd modele : {regress1.score(features1, target1)}")
 print()
 
 print(f"Coeficent du modele 1 : {regress.coef_}")
@@ -46,7 +57,7 @@ print(f"Coeficent du modele 2 : {regress1.coef_}")
 """ COST FONCTION"""
 
 target_pred = regress.predict(features)
-target1_pred = regress1.predict(features)
+target1_pred = regress1.predict(features1)
 
 
 print(""" 
