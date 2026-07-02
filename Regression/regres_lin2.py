@@ -1,8 +1,9 @@
-import pandas as pd
-import matplotlib.pyplot as plt
+import pandas as pd 
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
 from pathlib import Path
-from mpl_toolkits.mplot3d import Axes3D # Nécessaire pour activer la 3D
+
+
 
 # Définir la racine de votre projet (par exemple, le dossier du script actuel)
 BASE_DIR = Path(__file__).parent
@@ -11,50 +12,64 @@ BASE_DIR = Path(__file__).parent
 chemin_relatif = "data/age_vs_poids_vs_taille_vs_sexe.csv"
 
 data_file = BASE_DIR.parent / chemin_relatif
+#importing the dataset
+df = pd.read_csv(data_file)
 
-#Importation du dataset
-dataframe = pd.read_csv(data_file)
+features = df[['sexe', 'age']]
 
-#Les variables predictives
-X = dataframe[["age","taille"]]
+features1 = df[['sexe', 'age', 'taille']]
 
-#Le variables Cibles
-y = dataframe.poids
+target = df.poids
 
-#Instanciation et entrainement du modele
-model = LinearRegression()
-model.fit(X,y)
+target1 = df.poids
 
-testData = pd.DataFrame([[150, 151.15]], columns=["age", "taille"])# [[150,151.15]]
+""" Viewing the the content of the dataset 
+#showing the data
+#print(features)
 
-predict = model.predict(testData)
+#showing the data
+#print(target)
 
-print(f"Le prediction de poids pour l'enfant de: \n L'age : {testData["age"].values[0]} \n la taille : {testData["taille"].values[0]} \n est : {predict[0]:.2f} kg" )
+#description of the dataset
+print(df.DESCR)"""
 
+""" Training the model"""
 
-
-
-#==========================
-#  LES METRIQUES 
-#========================
-#Afficher la prediction global
-y_predict =model.predict(X)
-
-#==========================
-#  VISUALISATION 
-#========================
-
-#implementer la visualiation 3D
-fig = plt.figure()
-ax = fig.add_subplot(111,projection="3d")
-
-ax.scatter3D(dataframe["age"], dataframe["taille"],y,c=y, cmap='viridis', s=40, edgecolors='w', linewidth=0.5,label="Donnees reelles")
-
-ax.set_xlabel("Age")
-ax.set_ylabel('Taille')
-ax.set_zlabel('Poids')
-
-plt.title("Regression Lineaire")
-plt.show()
+regress = LinearRegression()
+regress1 = LinearRegression()
+regress.fit(features, target)
+regress1.fit(features1, target1)
 
 
+""" VERIFICATION DU MODELE"""
+
+# Affichage du score
+print(f" Score du premier modele: {regress.score(features, target)}")
+print()
+
+print(f" Score du secpnd modele : {regress1.score(features1, target1)}")
+print()
+
+print(f"Coeficent du modele 1 : {regress.coef_}")
+print()
+print(f"Coeficent du modele 2 : {regress1.coef_}")
+
+""" COST FONCTION"""
+
+target_pred = regress.predict(features)
+target1_pred = regress1.predict(features1)
+
+
+print(""" 
+      FONCTION DE COUT DU PREMIER MODEL
+      """)
+print(f"Erreur quadratique moyenne: {mean_squared_error(target, target_pred)}")
+print(f"Erreur Absolue moyenne: {mean_absolute_error(target, target_pred)}")
+print(f"Porcentage d'erreur absolu moyenne : {mean_absolute_percentage_error(target, target_pred)}")
+
+print(""" 
+      FONCTION DE COUT DU SECOND MODEL
+      """)
+print(f"Erreur quadratique moyenne: {mean_squared_error(target1, target1_pred)}")
+print(f"Erreur Absolue moyenne: {mean_absolute_error(target1, target1_pred)}")
+print(f"Porcentage d'erreur absolu moyenne : {mean_absolute_percentage_error(target1, target1_pred)}")
